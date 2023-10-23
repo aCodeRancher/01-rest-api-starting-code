@@ -16,22 +16,23 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+//add security config
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
             http.authorizeHttpRequests(
-                    auth -> auth.anyRequest().authenticated())
-                    .httpBasic(Customizer.withDefaults())
-                   .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource( request -> {
+                 auth -> auth.anyRequest().authenticated());
+                   http.httpBasic(Customizer.withDefaults());
+                   http.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource( request -> {
                         CorsConfiguration configuration = new CorsConfiguration();
                         configuration.setAllowedOrigins(List.of("http://localhost:3000"));
                         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
                         configuration.setAllowedHeaders(List.of("*"));
                         return configuration;
-                    }))
-                    .sessionManagement(
-                               session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                    .csrf(csrf->csrf.disable());
+                    }));
+                   http.sessionManagement(
+                             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                   http.csrf(csrf->csrf.disable());
   return http.build();
     }
 }
