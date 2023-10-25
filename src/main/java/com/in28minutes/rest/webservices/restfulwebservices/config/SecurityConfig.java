@@ -3,6 +3,7 @@ package com.in28minutes.rest.webservices.restfulwebservices.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,7 +22,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
             http.authorizeHttpRequests(
-                 auth -> auth.anyRequest().authenticated());
+                 auth -> auth
+                         .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+                         .anyRequest().authenticated());
                    http.httpBasic(Customizer.withDefaults());
                    http.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource( request -> {
                         CorsConfiguration configuration = new CorsConfiguration();
